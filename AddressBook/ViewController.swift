@@ -30,7 +30,10 @@ class ViewController: UIViewController,ABPeoplePickerNavigationControllerDelegat
     }
     
     func peoplePickerNavigationController(
-        peoplePicker: ABPeoplePickerNavigationController!,didSelectPerson person: ABRecordRef!) {
+        peoplePicker: ABPeoplePickerNavigationController!,
+        didSelectPerson person: ABRecordRef!,
+        property: ABPropertyID,
+        identifier: ABMultiValueIdentifier) {
             
             /* Do we know which picker this is? */
             if peoplePicker != personPicker{
@@ -41,6 +44,13 @@ class ViewController: UIViewController,ABPeoplePickerNavigationControllerDelegat
             
             let allEmails = ABMultiValueCopyArrayOfAllValues(emails).takeRetainedValue() as NSArray
             
+            var Phones: ABMultiValueRef = ABRecordCopyValue(person,property).takeRetainedValue()
+            var index = ABMultiValueGetIndexForIdentifier(Phones, identifier)
+            
+            let phone = ABMultiValueCopyValueAtIndex(Phones, index).takeRetainedValue() as! String
+            
+            println(phone)
+            
             for email in allEmails{
                 println(email)
             }
@@ -48,4 +58,5 @@ class ViewController: UIViewController,ABPeoplePickerNavigationControllerDelegat
     }
     
 }
+
 
